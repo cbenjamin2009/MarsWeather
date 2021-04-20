@@ -1,0 +1,347 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+}
+
+:root {
+    --fw-light: 300;
+    --fw-normal: 400;
+    --fw-semi: 500;
+    --fw-bold:700;
+    --fs-h1: 1.5rem;
+    --fs-h2: 2.25rem;
+    --fs-body: 1rem;
+    --fs-xl: 4.5rem;
+    --clr-light: #fff;
+    --clr-gray: #989898;
+    --clr-dark: #444;
+    --clr-accent: #d06d6d;
+    --clr-accent-dark: #613131;
+}
+
+.sr-only:not(:focus):not(:active){
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+body{
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    background-image: url(../img/mars.jpg);
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
+    color: var(--clr-light);
+}
+
+h1, h2, h3 {
+    line-height: 1;
+}
+
+a {
+    color: var(--clr-accent);
+
+    &:hover{
+        color: var(--clr-accent-dark)
+    }
+}
+
+.main-title {
+    font-size: var(--fs-h1);
+    font-weight: var(--fw-light);
+    text-transform: uppercase;
+    color: var(--clr-accent);
+    letter-spacing: 2px;
+
+    grid-column: 1/-1;
+}
+
+.section-title{
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-bold);
+    margin: 0;
+}
+
+.section-title--date{
+    font-size: var(--fs-xl);
+
+}
+
+.reading {
+    font-size: var(--fs-h1);
+    margin: 0;
+    color: var(--clr-gray)
+}
+
+.mars-current-weather{
+    background: rgba(0,0,0,.7);
+    padding: 2em;
+    max-width: 1000px;
+    margin: 4em 0 0 4em;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2em;
+}
+
+.date {
+    grid-column: 1/2;
+
+    &_day {
+        font-size: var(--fs-h2);
+        margin: 0;
+        color: var(--clr-gray);
+        font-weight: var(--fw-light);
+    }
+}
+
+.temp {
+    --border: solid .25em var(--clr-accent-dark);
+    grid-column: 2/3;
+    border-left: var(--border);
+    border-right: var(--border);
+    padding-left: 2em;
+
+}
+
+.wind {
+    grid-column: 3/4;
+    display: grid;
+    /*grid-auto-flow: dense;*/
+    grid-template-columns: repeat(2, 1fr);
+    /*separate height for this grid from parent grid*/
+    grid-template-rows: min-content 1fr;
+    align-self: start;
+    .section-title, .reading{
+        grid-column: 2 / 3;
+    }
+
+    &_direction{
+        --size: 6rem;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+        background-color: rgba(255,255,255,.5);
+        display: grid;
+        place-items: center;
+        /* span circle into 2 rows */
+        grid-row: 1 / span 2;
+       
+    }
+
+    &_direction:hover{
+        background-color:rgba(255,255,255,.8);
+    }
+
+    &_arrow{
+        /*update Custom Properties in JS 
+        to update the direction*/
+        --direction: 0deg;
+        --size: 1rem;
+        height: calc(var(--size) * 3);
+        width: var(--size);
+        background: var(--clr-accent-dark);
+        /*Change shape to triangle using clip-path polygon()
+        Then set location up 50% and set it to rotate based on direction variable. Rotate origin is bottom center so the bottom stays in the middle of the cirlce and add a transition delay to see it move  */
+        clip-path: polygon(50% 0, 0% 100%, 100% 100%);
+        transform: translateY(-50%) rotate(var(--direction));
+        
+        transform-origin: bottom center;
+        transition: transform 500ms ease;
+    }
+
+    &_arrow:hover{
+        background: var(--clr-accent);
+    }
+}
+
+.info {
+    grid-column: 1/3;
+}
+
+.info .season{
+    color: var(--clr-accent)
+}
+
+.info .seasons{
+    text-transform: capitalize;
+}
+
+.unit{
+    grid-column: 3/4;
+    place-self: end;
+    color: var(--clr-light);
+    display: flex;
+    opacity: .7;
+    transition: opacity 275ms linear;
+    gap: .5em;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    label{
+        cursor: pointer;
+    }
+
+    input{
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+    }
+
+    &_toggle{
+        cursor: pointer;
+        width: 4em;
+        border: 2px solid var(--clr-light);
+        background: transparent;
+        padding: 0;
+        border-radius: 100vmax;
+        margin: 0 1em;
+        
+
+        &::after {
+            content: '';
+            display: block;
+            background-color: var(--clr-light);
+            border-radius: 50%;
+            height: 1rem;
+            margin: 3px;
+            margin-left: auto;
+            width: 1rem;
+        }
+
+    }
+    :checked ~ .unit_toggle::after {
+        margin-left: 3px;
+        //margin-right: auto;
+    }
+}
+
+
+.previous-weather{
+    background: var(--clr-light);
+    color: var(--clr-dark);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    transform: translateY(80%);
+    transition: transform 350ms ease;
+    padding: 3em;
+    
+
+}
+
+.show-previous-weather{
+    position: absolute;
+    background: var(--clr-light);
+    left: 50%;
+    width: 10rem;
+    transform: translate(-50%, calc(-100% - 3rem));
+    text-align: center;
+    font-size: var(--fs-h2);
+    line-height: 1;
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    cursor: pointer;
+    color: var(--clr-gray);
+    border: 0;
+    font-family: inherit;
+
+    &:hover, &:focus{
+        color: var(--clr-dark);
+    }
+
+    span {
+        display: block;
+        transform: rotate(0);
+        transition: transform 300ms ease;
+    }
+}
+
+.previous-weather_title{
+    text-align: center;
+}
+
+.previous-days {
+    display: flex;
+    justify-content: space-between;
+}
+
+.previous-day{
+    opacity: 0;
+
+    & > * {margin: 0;}
+
+    &_date{
+        font-size: .9rem;
+        color: var(--clr-gray);
+    }
+
+    &_more-info{
+        cursor: pointer;
+        border: 0;
+        border-radius: 100vmax;
+        background: var(--clr-dark);
+        color: var(--clr-light);
+        text-transform: uppercase;
+        padding: .5em 1em;
+        margin-top: 1em;
+
+
+        &:hover, &:focus{
+            background: var(--clr-gray)
+        }
+    }
+}
+
+
+.show-weather.previous-weather{
+        transform: translateY(0);
+
+        .show-previous-weather span{
+            display: block;
+            transform: rotate(180deg)
+            translateY(-6px);
+        }
+
+
+       .previous-weather_title, .previous-day{
+            animation: slideUpIn 500ms forwards;
+
+        }
+
+        .previous-weather_title {
+            text-align: left;
+        }
+
+
+        --delay: 100ms;
+        .previous-day:nth-child(1) {animation-delay: var(--delay)}
+        .previous-day:nth-child(2) {animation-delay: calc(var(--delay) + 125ms)}
+        .previous-day:nth-child(3) {animation-delay: calc(var(--delay) + 225ms)}
+        .previous-day:nth-child(4) {animation-delay:calc(var(--delay) + 325ms)}
+        .previous-day:nth-child(5) {animation-delay: calc(var(--delay) + 425ms)}
+        .previous-day:nth-child(6) {animation-delay: calc(var(--delay) + 525ms)}
+        .previous-day:nth-child(7) {animation-delay: calc(var(--delay) + 625ms)}
+    }
+
+    @keyframes slideUpIn {
+        0% {
+            opacity: 0;
+            transform: translateY(50%);
+        }
+        
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
